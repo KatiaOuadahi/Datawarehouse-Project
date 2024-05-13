@@ -52,7 +52,7 @@ T_4=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset
 # List des dataframes
 dataframes = [DZ_1,DZ_2,DZ_3,DZ_4,DZ_5,DZ_6,DZ_7,DZ_8,DZ_9,DZ_10,DZ_11,M_1,M_2,M_3,M_4,T_1,T_2,T_3,T_4] 
 # List des attributs requises
-attributes_to_add = ["SNWD","SNOW","WDFG","PGTM","WSFG","WT01","WT02","WT03","WT05","WT07","WT08","WT09","WT16","WT18"]
+attributes_to_add = ["SNWD","SNOW","WDFG","PGTM","WSFG"]
 
 
 for df in dataframes:
@@ -62,7 +62,7 @@ for df in dataframes:
         if attribute not in df.columns:
             df[attribute] = np.nan 
             
-    attributes_to_remove = [col for col in df.columns if col.endswith('_ATTRIBUTES') or col =="ACSH" or col=="WDFM" or col=="WSFM"]
+    attributes_to_remove = [col for col in df.columns if col.endswith('_ATTRIBUTES') or col =="ACSH" or col=="WDFM" or col=="WSFM" or col.startswith('WT')]
     df.drop(columns=attributes_to_remove, inplace=True)
     
 
@@ -155,25 +155,76 @@ T_4[['PRCP','TMAX','TMIN']]=T_4[['PRCP','TMAX','TMIN']].fillna(T_4[['PRCP','TMAX
 
 
 # TRAITEMENT DE L'ATTRIBUTS WT**
-WT = ["WT01", "WT02", "WT03", "WT05", "WT07", "WT08", "WT09", "WT16", "WT18"]
+# WT = ["WT01", "WT02", "WT03", "WT05", "WT07", "WT08", "WT09", "WT16", "WT18"]
 
-for df in dataframes:
-    df[WT] = df[WT].fillna(0)
-
-
+# for df in dataframes:
+#     df[WT] = df[WT].fillna(0)
 
 
 
-# Reorder the columns and merge them in the same dataframe
 
+
+# Reorder the columns 
 for i in range(len(dataframes)):
     dataframes[i] = dataframes[i].reindex(sorted(dataframes[i].columns), axis=1)
 
 # Concatenate the DataFrames vertically
-climatic_dataSet= pd.concat(dataframes, ignore_index=True)
-climatic_dataSet.to_csv('C:/Users/Dell/Documents/M1_ISII/S2/DataWarehouse/climatic_dataSet.csv', index=False)
+climatic_df= pd.concat(dataframes, ignore_index=True)
 
 
-print(climatic_dataSet.isnull().sum())
-check_climatic_csv=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//climatic_dataSet.csv")
+
+
+# TRAITEMENT DE L'ATTRIBUTS DATE
+
+# Extract other date components
+
+climatic_df['DATE'] = pd.to_datetime(climatic_df['DATE'], format='%Y-%m-%d')
+climatic_df['Full_date'] = climatic_df['DATE']
+climatic_df['Day_Name'] = climatic_df['DATE'].dt.day_name()
+climatic_df['Month'] = climatic_df['DATE'].dt.month
+climatic_df['Mounth_Name'] = climatic_df['DATE'].dt.month_name()
+climatic_df['year'] = climatic_df['DATE'].dt.year
+climatic_df['quarter'] = climatic_df['DATE'].dt.to_period('Q').astype(str)
+climatic_df['semester'] = (climatic_df['DATE'].dt.year.astype(str) + '-S' +
+                    ((climatic_df['DATE'].dt.month-1) // 6 + 1).astype(str))
+# Define function to get season
+def get_season(month):
+    if 3 <= month <= 5:
+        return 'Spring'
+    elif 6 <= month <= 8:
+        return 'Summer'
+    elif 9 <= month <= 11:
+        return 'Fall'
+    else:
+        return 'Winter'
+
+climatic_df['Season'] = climatic_df['DATE'].dt.month.apply(get_season)
+climatic_df['WeekendFlag'] =climatic_df['Day_Name'].apply(lambda x: 1 if x in ['Friday', 'Saturday'] else 0)
+climatic_df.drop('DATE', axis=1, inplace=True)
+
+
+
+# Extract NAME and country_name
+
+def get_country_name(name):
+    # Split the name by comma and strip whitespace from both parts
+    parts = [part.strip().upper() for part in name.split(',')]
+
+    # Check if 'AG' is in the list of parts
+    if 'AG' in parts:
+        return 'Algerie'
+    elif 'MO' in parts:
+        return 'Morocco'
+    elif 'TS' in parts:
+        return 'Tunisia'
+    else:
+        return None
+
+# Create 'country_name' column
+climatic_df['country_name'] = climatic_df['NAME'].apply(get_country_name)
+
+
+#save the csv file
+climatic_df.to_csv('C:/Users/Dell/Documents/M1_ISII/S2/DataWarehouse/climatic_dataSet.csv', index=False)
+
 
