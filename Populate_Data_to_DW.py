@@ -3,9 +3,9 @@ import pandas as pd
 import datetime
 
 
-# Convertir la date complaite de format 'DD/MM/YYYY' à 'YYYYMMDD'
+# Convertir la date complaite de format 'YYYY-MM-DD' à 'YYYYMMDD'
 def get_id_date(fulldate):
-    return datetime.datetime.strptime(fulldate, '%m/%d/%Y').strftime('%Y%m%d')
+    return datetime.datetime.strptime(fulldate, '%Y-%m-%d').strftime('%Y%m%d')
   
     
   
@@ -16,7 +16,7 @@ def populate_Date_Dim(cursor, csvpath):
     Date_Dim = pd.read_csv(csvpath, usecols=['Full_date', 'Day_Name', 'WeekendFlag',
                                              'Month_Name', 'Month', 
                                              'quarter','semester',
-                                             'Season', 'year']).head(10)
+                                             'Season', 'year'])
     
     
    
@@ -45,7 +45,7 @@ def populate_Date_Dim(cursor, csvpath):
 def populate_Station_Dim(cursor, csv_path): 
     
     # Lire le fichier CSV en utilisant uniquement les colonnes nécessaires  
-    Station_Dim = pd.read_csv(csv_path, usecols=['STATION' , 'NAME' , 'country_name' , 'LATITUDE' , 'LONGITUDE' , 'ELEVATION']).head(10)
+    Station_Dim = pd.read_csv(csv_path, usecols=['STATION' , 'NAME' , 'country_name' , 'LATITUDE' , 'LONGITUDE' , 'ELEVATION'])
 
     for _, row in Station_Dim.iterrows():
         query_insert = "INSERT INTO Station_Dim ( StationID , NAME , COUNTRY_NAME , LATITUDE , LONGITUDE , ELEVATION)"\
@@ -66,7 +66,7 @@ def populate_Weather_fact(cursor, csv_path):
     # Lire le fichier CSV en utilisant uniquement les colonnes nécessaires
     FactWeather = pd.read_csv(csv_path, usecols=['Full_date','PRCP', 'SNOW', 'SNWD',
                                                  'TAVG', 'TMIN', 'TMAX',
-                                                 'PGTM', 'WSFG','WDFG']).head(10)
+                                                 'PGTM', 'WSFG','WDFG'])
     
     # Remplacer les valeurs NaN par 'N/A' dans le DataFrame FactWeather
     FactWeather.fillna('N/A', inplace=True)
