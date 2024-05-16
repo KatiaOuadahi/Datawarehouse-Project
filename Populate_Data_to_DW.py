@@ -3,9 +3,9 @@ import pandas as pd
 import datetime
 
 
-# Convertir la date complaite de format 'DD/MM/YYYY' à 'YYYYMMDD'
+# Convertir la date complaite de format 'YYYY-MM-DD' à 'YYYYMMDD'
 def get_id_date(fulldate):
-    return datetime.datetime.strptime(fulldate, '%m/%d/%Y').strftime('%Y%m%d')
+    return datetime.datetime.strptime(fulldate, '%Y-%m-%d').strftime('%Y%m%d')
   
     
   
