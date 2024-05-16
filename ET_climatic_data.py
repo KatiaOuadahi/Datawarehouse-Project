@@ -225,6 +225,7 @@ climatic_df['country_name'] = climatic_df['NAME'].apply(get_country_name)
 
 
 #save the csv file
-climatic_df.to_csv('C:/Users/Dell/Documents/M1_ISII/S2/DataWarehouse/climatic_dataSet.csv', index=False)
+file_path = "climatic_dataSet.csv"  
+climatic_df.to_csv(file_path, index=False)
 
 
