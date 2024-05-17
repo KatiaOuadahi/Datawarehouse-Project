@@ -74,7 +74,7 @@ print("Date_Dim Table was Created successfly")
 
 ##################################################
 
-Create_Table(cursor, "Weather_Fact" ," StationDWID INT NOT NULL AUTO_INCREMENT , DateDWID VARCHAR(8) , PRCP VARCHAR(10) , SNOW VARCHAR(10) NULL,"
+Create_Table(cursor, "Weather_Fact" ," StationDWID INT NOT NULL AUTO_INCREMENT , DateDWID VARCHAR(50) , PRCP VARCHAR(10) , SNOW VARCHAR(10) NULL,"
                                      " SNWD VARCHAR(10) NULL,TAVG VARCHAR(10) NULL, TMIN VARCHAR(10) NULL, TMAX VARCHAR(10) NULL,"
                                      " PGTM VARCHAR(10) NULL, WSFG VARCHAR(10) NULL, WDFG VARCHAR(10) NULL ,"
                                      " PRIMARY KEY (StationDWID, DateDWID),"
