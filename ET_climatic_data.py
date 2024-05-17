@@ -213,7 +213,7 @@ def get_country_name(name):
     # Check if 'AG' is in the list of parts
     if 'AG' in parts:
         return 'Algerie'
-    elif 'MO' in parts:
+    elif 'MO' or 'SP' in parts:
         return 'Morocco'
     elif 'TS' in parts:
         return 'Tunisia'
