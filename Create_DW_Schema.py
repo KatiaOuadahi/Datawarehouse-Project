@@ -63,7 +63,7 @@ print("Station_Dim Table was Created successfly")
 
 ###################################################
 
-Create_Table(cursor, "Date_Dim" ," DateDWID VARCHAR(8) GENERATED ALWAYS AS (DATE_FORMAT(Full_Date,'%Y%m%d')) STORED,"
+Create_Table(cursor, "Date_Dim" ," DateDWID VARCHAR(50) ,"
                                  " Full_Date DATE, Day_Name VARCHAR(10), WeekendFlag BOOL,"
                                  " Month_Name VARCHAR(15), Month_Number INT(2), Year_And_Semester VARCHAR(10),"
                                  " Year_And_Quarter VARCHAR(10), Season CHAR(10), Year YEAR,  "
@@ -74,7 +74,7 @@ print("Date_Dim Table was Created successfly")
 
 ##################################################
 
-Create_Table(cursor, "Weather_Fact" ," StationDWID INT NOT NULL AUTO_INCREMENT , DateDWID VARCHAR(8) NOT NULL, PRCP VARCHAR(10) , SNOW VARCHAR(10) NULL,"
+Create_Table(cursor, "Weather_Fact" ," StationDWID INT NOT NULL AUTO_INCREMENT , DateDWID VARCHAR(8) , PRCP VARCHAR(10) , SNOW VARCHAR(10) NULL,"
                                      " SNWD VARCHAR(10) NULL,TAVG VARCHAR(10) NULL, TMIN VARCHAR(10) NULL, TMAX VARCHAR(10) NULL,"
                                      " PGTM VARCHAR(10) NULL, WSFG VARCHAR(10) NULL, WDFG VARCHAR(10) NULL ,"
                                      " PRIMARY KEY (StationDWID, DateDWID),"
