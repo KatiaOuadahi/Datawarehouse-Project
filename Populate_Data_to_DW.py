@@ -25,7 +25,7 @@ def populate_Date_Dim(cursor, csvpath):
     Date_Dim = pd.read_csv(csvpath, usecols=['Full_date', 'Day_Name', 'WeekendFlag',
                                              'Month_Name', 'Month', 
                                              'quarter','semester',
-                                             'Season', 'year'])
+                                             'Season', 'year', 'STATION'])
     
     
    
