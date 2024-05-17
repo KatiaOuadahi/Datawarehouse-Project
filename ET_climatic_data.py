@@ -186,7 +186,7 @@ climatic_df['Month_Name'] = climatic_df['DATE'].dt.month_name()
 climatic_df['year'] = climatic_df['DATE'].dt.year
 climatic_df['quarter'] = climatic_df['DATE'].dt.to_period('Q').astype(str)
 climatic_df['semester'] = (climatic_df['DATE'].dt.year.astype(str) + '-S' +
-                    ((climatic_df['DATE'].dt.month-1) / 6 + 1).astype(str))
+                    ((climatic_df['DATE'].dt.month-1) // 6 + 1).astype(str))
 # Define function to get season
 def get_season(month):
     if 3 <= month <= 5:
