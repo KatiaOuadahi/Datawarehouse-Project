@@ -35,20 +35,55 @@ def fetch_years():
     years_options = [{'label': year, 'value': year} for year in years_df['Year']]
     return years_options
 
+# Function to fetch distinct seasons from a Seasons table
+def fetch_seasons():
+    query = "SELECT DISTINCT Season FROM Date_Dim ORDER BY Season ASC"
+    seasons_df = fetch_data(query)  # Assuming fetch_data() returns a DataFrame
+    # Convert the seasons data to a list of dictionaries for dropdown options
+    seasons_options = [{'label': season, 'value': season} for season in seasons_df['Season']]
+    return seasons_options
+
+
 # Function to fetch station data including name, country name, latitude, and longitude
 def fetch_station_data():
     query = "SELECT StationDWID, NAME, COUNTRY_NAME, LATITUDE, LONGITUDE FROM station_dim"
     station_data = fetch_data(query)
     return station_data
 
-# Function to fetch weather data for a selected measurement and year
-def fetch_weather_data(selected_measurement, selected_year):
-    query = f"""
-    SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
-    FROM weather_fact wf
-    JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
-    WHERE dd.Year = {selected_year}
-    GROUP BY wf.StationDWID
-    """
+# Function to fetch weather data for a selected measurement, year, and season
+def fetch_weather_data(selected_measurement, selected_year, selected_season):
+    if selected_year and selected_season:  # Both year and season selected
+        query = f"""
+        SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
+        FROM weather_fact wf
+        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
+        WHERE dd.Year = {selected_year}
+        AND dd.Season = '{selected_season}'
+        GROUP BY wf.StationDWID
+        """
+    elif selected_year:  # Only year selected
+        query = f"""
+        SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
+        FROM weather_fact wf
+        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
+        WHERE dd.Year = {selected_year}
+        GROUP BY wf.StationDWID
+        """
+    elif selected_season:  # Only season selected
+        query = f"""
+        SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
+        FROM weather_fact wf
+        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
+        WHERE dd.Season = '{selected_season}'
+        GROUP BY wf.StationDWID
+        """
+    else:  # Neither year nor season selected (default case)
+        query = f"""
+        SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
+        FROM weather_fact wf
+        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
+        GROUP BY wf.StationDWID
+        """
+
     weather_data = fetch_data(query)
     return weather_data

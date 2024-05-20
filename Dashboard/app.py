@@ -3,6 +3,7 @@ from dash import Dash
 import dash_bootstrap_components as dbc
 from layout import create_layout
 from dataFetch import fetch_years
+from dataFetch import fetch_seasons
 from layout import choropleth_map 
 
 
@@ -11,6 +12,7 @@ from layout import choropleth_map
 app = Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
 years_options = fetch_years()
+seasons_options = fetch_seasons()
 
 measurements_options = [
     {'label': 'PRCP', 'value': 'PRCP'},
@@ -28,13 +30,14 @@ measurements_options = [
 @app.callback(
     Output('choropleth-map', 'figure'),
     [Input('year-dropdown', 'value'),
+     Input('season-dropdown', 'value'),
      Input('measurement-radio', 'value')]
 )
-def update_map(selected_year, selected_measurement):
-    return choropleth_map(selected_year, selected_measurement)
+def update_map(selected_year, selected_measurement, selected_season):
+    return choropleth_map(selected_year, selected_measurement, selected_season)
 
 # Set the app layout using the create_layout function
-app.layout = create_layout(years_options, measurements_options)
+app.layout = create_layout(years_options, measurements_options, seasons_options)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
