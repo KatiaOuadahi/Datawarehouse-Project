@@ -44,6 +44,51 @@ def fetch_seasons():
     return seasons_options
 
 
+# Function to fetch distinct months from Date_Dim table
+def fetch_months():
+    query = "SELECT DISTINCT Month_Name FROM Date_Dim"
+    months_df = fetch_data(query)  # Assuming fetch_data() returns a DataFrame
+    # Convert the months data to a list of dictionaries for dropdown options
+    month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    
+    # Sort months_df based on the predefined order
+    months_df['Month_Order'] = months_df['Month_Name'].apply(lambda x: month_order.index(x))
+    sorted_months_df = months_df.sort_values(by='Month_Order')
+    
+    months_options = [{'label': month, 'value': month} for month in sorted_months_df['Month_Name']]
+    return months_options
+
+
+
+
+# Function to fetch distinct quarters for a specific year from Date_Dim table
+def fetch_quarters(selected_year):
+    query = f"""
+        SELECT DISTINCT Year_And_Quarter 
+        FROM Date_Dim 
+        WHERE Year = {selected_year} 
+        ORDER BY Year_And_Quarter ASC
+    """
+    quarters_df = fetch_data(query)  # Assuming fetch_data() returns a DataFrame
+    # Convert the quarters data to a list of dictionaries for dropdown options
+    quarters_options = [{'label': quarter, 'value': quarter} for quarter in quarters_df['Year_And_Quarter']]
+    return quarters_options
+
+
+# Function to fetch distinct semesters for a specific year from Date_Dim table
+def fetch_semesters(selected_year):
+    query = f"""
+        SELECT DISTINCT Year_And_Semester 
+        FROM Date_Dim 
+        WHERE Year = {selected_year} 
+        ORDER BY Year_And_Semester ASC
+    """
+    semesters_df = fetch_data(query)  # Assuming fetch_data() returns a DataFrame
+    # Convert the semesters data to a list of dictionaries for dropdown options
+    semesters_options = [{'label': semester, 'value': semester} for semester in semesters_df['Year_And_Semester']]
+    return semesters_options
+
+
 # Function to fetch station data including name, country name, latitude, and longitude
 def fetch_station_data():
     query = "SELECT StationDWID, NAME, COUNTRY_NAME, LATITUDE, LONGITUDE FROM station_dim"

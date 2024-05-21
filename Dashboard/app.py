@@ -1,18 +1,16 @@
-from dash.dependencies import Input, Output
-from dash import Dash
+from dash.dependencies import Input, Output, State
+from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
-from layout import create_layout
-from dataFetch import fetch_years
-from dataFetch import fetch_seasons
-from layout import choropleth_map 
-
-
-
+from layout import create_layout, choropleth_map
+from dataFetch import fetch_years, fetch_seasons, fetch_quarters, fetch_semesters, fetch_months
+import dash
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
+# Fetch options for dropdowns
 years_options = fetch_years()
 seasons_options = fetch_seasons()
+months_options = fetch_months()
 
 measurements_options = [
     {'label': 'PRCP', 'value': 'PRCP'},
@@ -26,19 +24,71 @@ measurements_options = [
     {'label': 'WDFG', 'value': 'WDFG'}
 ]
 
-# Register the callback
+# Register the callback to update quarters and semesters options based on the selected year
+@app.callback(
+    [
+        Output('quarter-dropdown', 'options'),
+        Output('semester-dropdown', 'options')
+    ],
+    [
+        Input('year-dropdown', 'value')
+    ]
+)
+def update_quarters_semesters(selected_year):
+    quarters_options = fetch_quarters(selected_year)  # Fetch quarters options for the selected year
+    semesters_options = fetch_semesters(selected_year)  # Fetch semesters options for the selected year
+    return quarters_options, semesters_options
+
+# Register the callback to update the map
 @app.callback(
     Output('choropleth-map', 'figure'),
-    [Input('year-dropdown', 'value'),
-     Input('season-dropdown', 'value'),
-     Input('measurement-radio', 'value')]
+    [
+        Input('year-dropdown', 'value'),
+        Input('season-dropdown', 'value'),
+        Input('quarter-dropdown', 'value'),
+        Input('semester-dropdown', 'value'),
+        Input('month-dropdown', 'value'),
+        Input('measurement-radio', 'value')
+    ]
 )
-def update_map(selected_year, selected_measurement, selected_season):
-    return choropleth_map(selected_year, selected_measurement, selected_season)
+def update_map(selected_year, selected_season, selected_quarter, selected_semester, selected_month, selected_measurement):
+    selected_filter = selected_season or selected_quarter or selected_semester or selected_month
+    return choropleth_map(selected_year, selected_filter, selected_measurement)
+
+# Register the callback to clear other dropdowns
+@app.callback(
+    [
+        Output('season-dropdown', 'value'),
+        Output('quarter-dropdown', 'value'),
+        Output('semester-dropdown', 'value'),
+        Output('month-dropdown', 'value')
+    ],
+    [
+        Input('season-dropdown', 'value'),
+        Input('quarter-dropdown', 'value'),
+        Input('semester-dropdown', 'value'),
+        Input('month-dropdown', 'value')
+    ]
+)
+def clear_other_dropdowns(season, quarter, semester, month):
+    ctx = dash.callback_context
+    trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if trigger_id == 'season-dropdown' and season:
+        return season, None, None, None
+    elif trigger_id == 'quarter-dropdown' and quarter:
+        return None, quarter, None, None
+    elif trigger_id == 'semester-dropdown' and semester:
+        return None, None, semester, None
+    elif trigger_id == 'month-dropdown' and month:
+        return None, None, None, month
+    else:
+        return None, None, None, None
 
 # Set the app layout using the create_layout function
-app.layout = create_layout(years_options, measurements_options, seasons_options)
+app.layout = create_layout(years_options, measurements_options, seasons_options, [], [], months_options)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
 
