@@ -7,10 +7,9 @@ import dash
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
-# Fetch options for dropdowns
+# Fetch options for years
 years_options = fetch_years()
-seasons_options = fetch_seasons()
-months_options = fetch_months()
+
 
 measurements_options = [
     {'label': 'PRCP', 'value': 'PRCP'},
@@ -27,17 +26,21 @@ measurements_options = [
 # Register the callback to update quarters and semesters options based on the selected year
 @app.callback(
     [
+        Output('season-dropdown', 'options'),
         Output('quarter-dropdown', 'options'),
-        Output('semester-dropdown', 'options')
+        Output('semester-dropdown', 'options'),
+        Output('month-dropdown', 'options')
     ],
     [
         Input('year-dropdown', 'value')
     ]
 )
 def update_quarters_semesters(selected_year):
+    seasons_options = fetch_seasons(selected_year) 
     quarters_options = fetch_quarters(selected_year)  # Fetch quarters options for the selected year
     semesters_options = fetch_semesters(selected_year)  # Fetch semesters options for the selected year
-    return quarters_options, semesters_options
+    months_options = fetch_months(selected_year)  
+    return seasons_options, quarters_options, semesters_options, months_options
 
 # Register the callback to update the map
 @app.callback(
@@ -53,7 +56,7 @@ def update_quarters_semesters(selected_year):
 )
 def update_map(selected_year, selected_season, selected_quarter, selected_semester, selected_month, selected_measurement):
     selected_filter = selected_season or selected_quarter or selected_semester or selected_month
-    return choropleth_map(selected_year, selected_filter, selected_measurement)
+    return choropleth_map(selected_measurement, selected_year, selected_filter)
 
 # Register the callback to clear other dropdowns
 @app.callback(
@@ -86,7 +89,7 @@ def clear_other_dropdowns(season, quarter, semester, month):
         return None, None, None, None
 
 # Set the app layout using the create_layout function
-app.layout = create_layout(years_options, measurements_options, seasons_options, [], [], months_options)
+app.layout = create_layout(years_options, measurements_options, [], [], [], [])
 
 if __name__ == '__main__':
     app.run_server(debug=True)

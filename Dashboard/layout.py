@@ -4,10 +4,10 @@ from dataFetch import fetch_weather_data, fetch_station_data
 import pandas as pd
 import plotly.graph_objects as go
 
-def choropleth_map(selected_year, selected_filter, selected_measurement):
+def choropleth_map(selected_measurement, selected_year, selected_filter):
     # Fetch weather data for the selected year and filter
     weather_data = fetch_weather_data(selected_measurement, selected_year, selected_filter)
-    
+
     # Fetch station data including name, country name, latitude, and longitude
     station_data = fetch_station_data()
     
@@ -22,7 +22,7 @@ def choropleth_map(selected_year, selected_filter, selected_measurement):
         marker=dict(
             size=10,  # Adjust the size of the points or squares
             color=merged_data["MeanValue"],  # Color based on the measurement value
-            colorscale="Blues",  # Choose a colorscale for coloring the points
+            colorscale="Viridis",  # Choose a colorscale for coloring the points
             colorbar=dict(title=selected_measurement),  # Add a colorbar with measurement title
         ),
         hoverinfo="text",  # Show custom text on hover
@@ -53,7 +53,7 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
     initial_measurement = 'PRCP'
 
     # Get the initial choropleth map figure
-    initial_map_figure = choropleth_map(initial_year, None, initial_measurement)  # Pass None for the initial filter
+    initial_map_figure = choropleth_map(initial_measurement, initial_year, None)  # Pass None for the initial filter
 
     layout = html.Div([
         html.H1("Climatic Dashboard", style={'textAlign': 'center'}),
@@ -64,7 +64,7 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                 options=years_options,
                 value=initial_year,
                 placeholder="Select a year",
-                clearable=True,
+                clearable=False,
                 searchable=False,
                 style={'width': '150px', 'marginRight': '20px'}
             ),
