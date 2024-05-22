@@ -213,7 +213,7 @@ def get_country_name(name):
     # Check if 'AG' is in the list of parts
     if 'AG' in parts:
         return 'Algerie'
-    elif 'MO' or 'SP' in parts:
+    elif 'MO' in parts or 'SP' in parts:
         return 'Morocco'
     elif 'TS' in parts:
         return 'Tunisia'
@@ -225,7 +225,7 @@ climatic_df['country_name'] = climatic_df['NAME'].apply(get_country_name)
 
 
 #save the csv file
-file_path = "climatic_dataSet.csv"  
+file_path = "climatic_dataSet1.csv"  
 climatic_df.to_csv(file_path, index=False)
 
 
