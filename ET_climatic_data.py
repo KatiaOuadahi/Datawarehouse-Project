@@ -186,7 +186,7 @@ climatic_df['Month_Name'] = climatic_df['DATE'].dt.month_name()
 climatic_df['year'] = climatic_df['DATE'].dt.year
 climatic_df['quarter'] = climatic_df['DATE'].dt.to_period('Q').astype(str)
 climatic_df['semester'] = (climatic_df['DATE'].dt.year.astype(str) + '-S' +
-                    ((climatic_df['DATE'].dt.month-1) / 6 + 1).astype(str))
+                    ((climatic_df['DATE'].dt.month-1) // 6 + 1).astype(str))
 # Define function to get season
 def get_season(month):
     if 3 <= month <= 5:
@@ -213,7 +213,9 @@ def get_country_name(name):
     # Check if 'AG' is in the list of parts
     if 'AG' in parts:
         return 'Algeria'
-    elif 'MO' in parts or 'SP' in parts:
+    elif 'MO' in parts:
+        return 'Marocco'
+    elif 'SP' in parts:
         return 'Marocco'
     elif 'TS' in parts:
         return 'Tunisia'
@@ -227,5 +229,4 @@ climatic_df['country_name'] = climatic_df['NAME'].apply(get_country_name)
 #save the csv file
 file_path = "climatic_dataSet.csv"  
 climatic_df.to_csv(file_path, index=False)
-
 
