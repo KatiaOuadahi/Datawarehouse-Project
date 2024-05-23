@@ -1,8 +1,9 @@
 from dash import dcc, html
 import plotly.express as px
-from dataFetch import fetch_weather_data, fetch_station_data
+from dataFetch import fetch_weather_data, fetch_station_data , fetch_weather_data_forGraph
 import pandas as pd
 import plotly.graph_objects as go
+from dataFetch import *
 
 def choropleth_map(selected_measurement, selected_year, selected_filter):
     # Fetch weather data for the selected year and filter
@@ -49,6 +50,41 @@ def choropleth_map(selected_measurement, selected_year, selected_filter):
 
 
 
+################################################################
+
+
+def line_plot(selected_measurement):
+    weather_data = fetch_weather_data_forGraph(selected_measurement)
+
+    fig = px.line(
+        weather_data, 
+        x='Decade', 
+        y='MeanValue', 
+        color='COUNTRY_NAME',
+        markers=True,
+        title=f'{selected_measurement} Over Decades by Country'
+    )
+    
+    fig.update_layout(
+        xaxis_title='Decade',
+        yaxis_title=selected_measurement,
+        legend_title_text='Country',
+        xaxis=dict(
+            tickmode='linear',
+            dtick=10
+        )
+    )
+    
+    return fig
+
+
+
+
+
+################################################################
+
+
+
 def create_layout(years_options, measurements_options, seasons_options, quarters_options, semesters_options, months_options):
     # Define the initial values for year and measurement
     initial_year = 1920
@@ -56,6 +92,11 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
 
     # Get the initial choropleth map figure
     initial_map_figure = choropleth_map(initial_measurement, initial_year, None)  # Pass None for the initial filter
+
+     # Get the initial time series graph figure
+    #initial_time_series_figure = time_series_graph(initial_measurement, initial_year, None)  # Pass None for the initial filter
+
+    initial_line_figure = line_plot(initial_measurement)
 
     layout = html.Div([
         html.Div([
@@ -123,7 +164,13 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                 dcc.Graph(id='choropleth-map', figure=initial_map_figure, style={'width': '100%','height': '380px', 'margin-top': '20px'}),
                 html.H4("--Interactive Map of Maghreb Climate Data--", style={'textAlign': 'center', 'margin-top': '10px'}) 
             ], style={'flex': '2', 'margin-left': '20px'})
-        ], style={'display': 'flex', 'align-items': 'flex-start', 'margin-bottom': '20px', 'justify-content': 'center'})
-    ], style={'max-width': '1200px', 'margin': '0 auto'})
+        ], style={'display': 'flex', 'align-items': 'flex-start', 'margin-bottom': '20px', 'justify-content': 'center'}),
+
+        # Add the time series graph below the map and dropdowns
+        html.Div([
+            dcc.Graph(id='line-plot', figure=initial_line_figure, style={'width': '100%','height': '100%', 'margin-top': '100px'}),
+            html.H4("--Comparative Climatic Plotline : Algeria VS Morocco VS Tunisia--", style={'textAlign': 'center', 'margin-top': '10px', 'margin-bottom': '50px'}), 
+        ])
+    ],style={'max-width': '1200px', 'margin': '0 auto'})
 
     return layout

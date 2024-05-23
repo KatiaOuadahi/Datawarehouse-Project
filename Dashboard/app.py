@@ -1,7 +1,7 @@
 from dash.dependencies import Input, Output, State
 from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
-from layout import create_layout, choropleth_map
+from layout import create_layout, choropleth_map, line_plot
 from dataFetch import fetch_years, fetch_seasons, fetch_quarters, fetch_semesters, fetch_months
 import dash
 
@@ -42,6 +42,9 @@ def update_quarters_semesters(selected_year):
     months_options = fetch_months(selected_year)  
     return seasons_options, quarters_options, semesters_options, months_options
 
+
+
+
 # Register the callback to update the map
 @app.callback(
     Output('choropleth-map', 'figure'),
@@ -57,6 +60,19 @@ def update_quarters_semesters(selected_year):
 def update_map(selected_year, selected_season, selected_quarter, selected_semester, selected_month, selected_measurement):
     selected_filter = selected_season or selected_quarter or selected_semester or selected_month
     return choropleth_map(selected_measurement, selected_year, selected_filter)
+
+
+
+
+
+@app.callback(
+    Output('line-plot', 'figure'),
+    [Input('measurement-radio', 'value')]
+)
+def update_line_plot(selected_measurement):
+    return line_plot(selected_measurement)
+
+
 
 # Register the callback to clear other dropdowns
 @app.callback(

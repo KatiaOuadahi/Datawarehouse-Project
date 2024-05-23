@@ -125,3 +125,20 @@ def fetch_weather_data(selected_measurement, selected_year, selected_filter):
     # Fetch the data
     weather_data = fetch_data(query)
     return weather_data
+
+
+def fetch_weather_data_forGraph(selected_measurement):
+    query = f"""
+        SELECT FLOOR(dd.Year / 10) * 10 AS Decade, 
+               AVG(wf.{selected_measurement}) AS MeanValue, 
+               st.COUNTRY_NAME
+        FROM weather_fact wf
+        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
+        JOIN station_dim st ON wf.StationDWID = st.StationDWID
+        WHERE dd.Year BETWEEN 1920 AND 2022
+        GROUP BY Decade, st.COUNTRY_NAME
+        ORDER BY Decade
+    """
+    weather_data = fetch_data(query)
+    return weather_data
+
