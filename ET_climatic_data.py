@@ -12,36 +12,36 @@ import numpy as np
 
 #ALGERIA
 
-DZ_1=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1920-1929_ALGERIA.csv")
-DZ_2=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1930-1939_ALGERIA.csv")
-DZ_3=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1940-1949_ALGERIA.csv")
-DZ_4=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1950-1959_ALGERIA.csv")
-DZ_5=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1960-1969_ALGERIA.csv")
-DZ_6=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1970-1979_ALGERIA.csv")
-DZ_7=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1980-1989_ALGERIA.csv")
-DZ_8=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_1990-1999_ALGERIA.csv")
-DZ_9=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_2000-2009_ALGERIA.csv")
-DZ_10=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_2010-2019_ALGERIA.csv")
-DZ_11=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Algeria//Weather_2020-2022_ALGERIA.csv")
+DZ_1=pd.read_csv("./Weather_Data//Algeria//Weather_1920-1929_ALGERIA.csv")
+DZ_2=pd.read_csv("./Weather_Data//Algeria//Weather_1930-1939_ALGERIA.csv")
+DZ_3=pd.read_csv("./Weather_Data//Algeria//Weather_1940-1949_ALGERIA.csv")
+DZ_4=pd.read_csv("./Weather_Data//Algeria//Weather_1950-1959_ALGERIA.csv")
+DZ_5=pd.read_csv("./Weather_Data//Algeria//Weather_1960-1969_ALGERIA.csv")
+DZ_6=pd.read_csv("./Weather_Data//Algeria//Weather_1970-1979_ALGERIA.csv")
+DZ_7=pd.read_csv("./Weather_Data//Algeria//Weather_1980-1989_ALGERIA.csv")
+DZ_8=pd.read_csv("./Weather_Data//Algeria//Weather_1990-1999_ALGERIA.csv")
+DZ_9=pd.read_csv("./Weather_Data//Algeria//Weather_2000-2009_ALGERIA.csv")
+DZ_10=pd.read_csv("./Weather_Data//Algeria//Weather_2010-2019_ALGERIA.csv")
+DZ_11=pd.read_csv("./Weather_Data//Algeria//Weather_2020-2022_ALGERIA.csv")
 
 
 
 
 #MOROCCO
 
-M_1=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Morocco//Weather_1920-1959_MOROCCO.txt")
-M_2=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Morocco//Weather_1960-1989_MOROCCO.csv")
-M_3=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Morocco//Weather_1990-2019_MOROCCO.csv")
-M_4=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Morocco//Weather_2020-2022_MOROCCO.csv")
+M_1=pd.read_csv("./Weather_Data//Morocco//Weather_1920-1959_MOROCCO.csv")
+M_2=pd.read_csv("./Weather_Data//Morocco//Weather_1960-1989_MOROCCO.csv")
+M_3=pd.read_csv("./Weather_Data//Morocco//Weather_1990-2019_MOROCCO.csv")
+M_4=pd.read_csv("./Weather_Data//Morocco//Weather_2020-2022_MOROCCO.csv")
 
 
 
 #TUNISIA
 
-T_1=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Tunisia//Weather_1920-1959_TUNISIA.csv")
-T_2=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Tunisia//Weather_1960-1989_TUNISIA.csv")
-T_3=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Tunisia//Weather_1990-2019_TUNISIA.csv")
-T_4=pd.read_csv("C://Users//Dell//Documents//M1_ISII//S2//DataWarehouse//Dataset//Weather_Data//Tunisia//Weather_2020-2022_TUNISIA.csv")
+T_1=pd.read_csv("./Weather_Data//Tunisia//Weather_1920-1959_TUNISIA.csv")
+T_2=pd.read_csv("./Weather_Data//Tunisia//Weather_1960-1989_TUNISIA.csv")
+T_3=pd.read_csv("./Weather_Data//Tunisia//Weather_1990-2019_TUNISIA.csv")
+T_4=pd.read_csv("./Weather_Data//Tunisia//Weather_2020-2022_TUNISIA.csv")
 
 
 
@@ -204,8 +204,7 @@ def get_country_name(name):
     elif 'MO' in parts:
         return 'Marocco'
     elif 'SP' in parts:
-        return 'Marocco'
-
+        return 'Morocco'
     elif 'TS' in parts:
         return 'Tunisia'
     else:
