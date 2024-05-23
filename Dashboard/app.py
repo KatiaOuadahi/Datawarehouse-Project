@@ -5,12 +5,13 @@ from layout import create_layout, choropleth_map, line_plot
 from dataFetch import fetch_years, fetch_seasons, fetch_quarters, fetch_semesters, fetch_months
 import dash
 
+# Initialiser l'application Dash avec un thème Bootstrap
 app = Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
-# Fetch options for years
+# Récupérer les options pour les années
 years_options = fetch_years()
 
-
+# Définir les options pour les mesures climatiques
 measurements_options = [
     {'label': 'PRCP', 'value': 'PRCP'},
     {'label': 'SNOW', 'value': 'SNOW'},
@@ -23,7 +24,7 @@ measurements_options = [
     {'label': 'WDFG', 'value': 'WDFG'}
 ]
 
-# Register the callback to update quarters and semesters options based on the selected year
+# Enregistrer le callback pour mettre à jour les options de saisons, trimestres, semestres et mois en fonction de l'année sélectionnée
 @app.callback(
     [
         Output('season-dropdown', 'options'),
@@ -31,21 +32,21 @@ measurements_options = [
         Output('semester-dropdown', 'options'),
         Output('month-dropdown', 'options')
     ],
-    [
-        Input('year-dropdown', 'value')
-    ]
+    [Input('year-dropdown', 'value')]
 )
 def update_quarters_semesters(selected_year):
-    seasons_options = fetch_seasons(selected_year) 
-    quarters_options = fetch_quarters(selected_year)  # Fetch quarters options for the selected year
-    semesters_options = fetch_semesters(selected_year)  # Fetch semesters options for the selected year
-    months_options = fetch_months(selected_year)  
+    # Récupérer les options pour les saisons, trimestres, semestres et mois
+    seasons_options = fetch_seasons(selected_year)
+    quarters_options = fetch_quarters(selected_year)
+    semesters_options = fetch_semesters(selected_year)
+    months_options = fetch_months(selected_year)
     return seasons_options, quarters_options, semesters_options, months_options
 
 
 
 
-# Register the callback to update the map
+
+# Enregistrer le callback pour mettre à jour la carte choroplèthe
 @app.callback(
     Output('choropleth-map', 'figure'),
     [
@@ -58,6 +59,7 @@ def update_quarters_semesters(selected_year):
     ]
 )
 def update_map(selected_year, selected_season, selected_quarter, selected_semester, selected_month, selected_measurement):
+    # Déterminer le filtre sélectionné (saison, trimestre, semestre ou mois)
     selected_filter = selected_season or selected_quarter or selected_semester or selected_month
     return choropleth_map(selected_measurement, selected_year, selected_filter)
 
@@ -65,6 +67,8 @@ def update_map(selected_year, selected_season, selected_quarter, selected_semest
 
 
 
+
+# Enregistrer le callback pour mettre à jour le graphique en ligne
 @app.callback(
     Output('line-plot', 'figure'),
     [Input('measurement-radio', 'value')]
@@ -74,7 +78,10 @@ def update_line_plot(selected_measurement):
 
 
 
-# Register the callback to clear other dropdowns
+
+
+
+# Enregistrer le callback pour effacer les autres listes déroulantes lorsque l'une est sélectionnée
 @app.callback(
     [
         Output('season-dropdown', 'value'),
@@ -90,6 +97,7 @@ def update_line_plot(selected_measurement):
     ]
 )
 def clear_other_dropdowns(season, quarter, semester, month):
+    # Identifier la liste déroulante qui a déclenché le callback
     ctx = dash.callback_context
     trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
@@ -104,10 +112,13 @@ def clear_other_dropdowns(season, quarter, semester, month):
     else:
         return None, None, None, None
 
-# Set the app layout using the create_layout function
+
+
+
+# Définir la mise en page de l'application en utilisant la fonction create_layout
 app.layout = create_layout(years_options, measurements_options, [], [], [], [])
+
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-
