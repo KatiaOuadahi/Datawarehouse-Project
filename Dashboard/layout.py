@@ -59,11 +59,14 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
 
     layout = html.Div([
         html.Div([
-            html.H1("Maghreb Climate Dashboard", style={'textAlign': 'center'}),
-        ], style={'margin-bottom': '20px'}),
+            html.H1("Maghreb Climate Dashboard : Historical Data (1920-2022)", style={'textAlign': 'center'}),
+        ], style={'margin-bottom': '50px'}),
 
         html.Div([
             html.Div([
+                html.H3("Filters", style={'margin-bottom': '10px'}),  # Add text above dropdowns
+                
+                html.Label("Select Year", style={'margin-bottom': '5px'}),
                 dcc.Dropdown(
                     id='year-dropdown',
                     options=years_options,
@@ -71,15 +74,17 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                     placeholder="Select a year",
                     clearable=False,
                     searchable=False,
-                    style={'width': '150px', 'margin-bottom': '20px'}
+                    style={'width': '200px', 'margin-bottom': '60px'}
                 ),
+
+                html.Label("Select Additional Filter", style={'margin-bottom': '5px'}),
                 dcc.Dropdown(
                     id='season-dropdown',
                     options=seasons_options,
                     placeholder="Select a season",
                     clearable=True,
                     searchable=False,
-                    style={'width': '150px', 'margin-bottom': '20px'}
+                    style={'width': '200px', 'margin-bottom': '50px'}
                 ),
                 dcc.Dropdown(
                     id='quarter-dropdown',
@@ -87,7 +92,7 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                     placeholder="Select a quarter",
                     clearable=True,
                     searchable=False,
-                    style={'width': '150px', 'margin-bottom': '20px'}
+                    style={'width': '200px', 'margin-bottom': '50px'}
                 ),
                 dcc.Dropdown(
                     id='semester-dropdown',
@@ -95,7 +100,7 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                     placeholder="Select a semester",
                     clearable=True,
                     searchable=False,
-                    style={'width': '150px', 'margin-bottom': '20px'}
+                    style={'width': '200px', 'margin-bottom': '50px'}
                 ),
                 dcc.Dropdown(
                     id='month-dropdown',
@@ -103,20 +108,22 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                     placeholder="Select a month",
                     clearable=True,
                     searchable=False,
-                    style={'width': '150px', 'margin-bottom': '20px'}
+                    style={'width': '200px', 'margin-bottom': '50px'}
                 ),
-            ], style={'flex': '1', 'margin-right': '20px', 'max-width': '200px', 'margin-top': '30px'}),
+            ], style={'flex': '1', 'margin-right': '20px', 'max-width': '220px'}),
 
             html.Div([
+                html.Label("Choose a climatic measurment ", style={'margin-bottom': '5px' , 'margin-top': '40px'}),
                 dcc.RadioItems(
                     id='measurement-radio',
                     options=measurements_options,
                     value=initial_measurement,
                     labelStyle={'display': 'inline-block', 'margin-right': '20px'}
                 ),
-                dcc.Graph(id='choropleth-map', figure=initial_map_figure, style={'width': '100%'})
+                dcc.Graph(id='choropleth-map', figure=initial_map_figure, style={'width': '100%','height': '380px', 'margin-top': '20px'}),
+                html.H4("--Interactive Map of Maghreb Climate Data--", style={'textAlign': 'center', 'margin-top': '10px'}) 
             ], style={'flex': '2', 'margin-left': '20px'})
         ], style={'display': 'flex', 'align-items': 'flex-start', 'margin-bottom': '20px', 'justify-content': 'center'})
-    ], style={'max-width': '1000px', 'margin': '0 auto'})
+    ], style={'max-width': '1200px', 'margin': '0 auto'})
 
     return layout
