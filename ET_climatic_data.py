@@ -166,7 +166,7 @@ climatic_df['DATE'] = pd.to_datetime(climatic_df['DATE'], format='%Y-%m-%d')
 climatic_df['Full_date'] = climatic_df['DATE']
 climatic_df['Day_Name'] = climatic_df['DATE'].dt.day_name()
 climatic_df['Month'] = climatic_df['DATE'].dt.month
-climatic_df['Mounth_Name'] = climatic_df['DATE'].dt.month_name()
+climatic_df['Month_Name'] = climatic_df['DATE'].dt.month_name()
 climatic_df['year'] = climatic_df['DATE'].dt.year
 climatic_df['quarter'] = climatic_df['DATE'].dt.to_period('Q').astype(str)
 climatic_df['semester'] = (climatic_df['DATE'].dt.year.astype(str) + '-S' +
