@@ -99,33 +99,6 @@ def fetch_station_data():
 
 # Function to fetch weather data for a selected measurement, year, and filter
 
-'''
-def fetch_weather_data(selected_measurement, selected_year, selected_season):
-    if selected_year and selected_season:  # Both year and season selected
-        query = f"""
-        SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
-        FROM weather_fact wf
-        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
-        WHERE dd.Year = {selected_year}
-        AND dd.Season = '{selected_season}'
-        GROUP BY wf.StationDWID
-        """
-    elif selected_year:  # Only year selected
-        query = f"""
-        SELECT wf.StationDWID, AVG(wf.{selected_measurement}) AS MeanValue
-        FROM weather_fact wf
-        JOIN Date_Dim dd ON wf.DateDWID = dd.DateDWID
-        WHERE dd.Year = {selected_year}
-        GROUP BY wf.StationDWID
-        """
-        
-    
-    
-
-    weather_data = fetch_data(query)
-    return weather_data
-'''
-
 def fetch_weather_data(selected_measurement, selected_year, selected_filter):
     # Start building the query
     query = f"""
