@@ -172,7 +172,9 @@ climatic_df['quarter'] = climatic_df['DATE'].dt.to_period('Q').astype(str)
 climatic_df['semester'] = (climatic_df['DATE'].dt.year.astype(str) + '-S' +
                     ((climatic_df['DATE'].dt.month-1) // 6 + 1).astype(str))
 
-# Définir une fonction pour obtenir la saison
+# Define function to get season
+
+
 
 def get_season(month):
     if 3 <= month <= 5:
@@ -198,9 +200,12 @@ def get_country_name(name):
     
    
     if 'AG' in parts:
-        return 'Algerie'
-    elif 'MO' in parts or 'SP' in parts:
-        return 'Morocco'
+        return 'Algeria'
+    elif 'MO' in parts:
+        return 'Marocco'
+    elif 'SP' in parts:
+        return 'Marocco'
+
     elif 'TS' in parts:
         return 'Tunisia'
     else:
@@ -210,6 +215,9 @@ def get_country_name(name):
 climatic_df['country_name'] = climatic_df['NAME'].apply(get_country_name)
 
 
-#Enregistrer le fichier CSV
-climatic_df.to_csv('C:/Users/Dell/Documents/M1_ISII/S2/DataWarehouse/climatic_dataSet.csv', index=False)
+
+file_path = "climatic_dataSet.csv"  
+climatic_df.to_csv(file_path, index=False)
+
+
 
