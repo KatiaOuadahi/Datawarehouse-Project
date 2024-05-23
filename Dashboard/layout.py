@@ -47,6 +47,8 @@ def choropleth_map(selected_measurement, selected_year, selected_filter):
     
     return fig
 
+
+
 def create_layout(years_options, measurements_options, seasons_options, quarters_options, semesters_options, months_options):
     # Define the initial values for year and measurement
     initial_year = 1920
@@ -56,50 +58,55 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
     initial_map_figure = choropleth_map(initial_measurement, initial_year, None)  # Pass None for the initial filter
 
     layout = html.Div([
-        html.H1("Climatic Dashboard", style={'textAlign': 'center'}),
+        html.Div([
+            html.H1("Maghreb Climate Dashboard", style={'textAlign': 'center'}),
+        ], style={'margin-bottom': '20px'}),
 
         html.Div([
-            dcc.Dropdown(
-                id='year-dropdown',
-                options=years_options,
-                value=initial_year,
-                placeholder="Select a year",
-                clearable=False,
-                searchable=False,
-                style={'width': '150px', 'marginRight': '20px'}
-            ),
-            dcc.Dropdown(
-                id='season-dropdown',
-                options=seasons_options,
-                placeholder="Select a season",
-                clearable=True,
-                searchable=False,
-                style={'width': '150px', 'marginRight': '20px'}
-            ),
-            dcc.Dropdown(
-                id='quarter-dropdown',
-                options=quarters_options,
-                placeholder="Select a quarter",
-                clearable=True,
-                searchable=False,
-                style={'width': '150px', 'marginRight': '20px'}
-            ),
-            dcc.Dropdown(
-                id='semester-dropdown',
-                options=semesters_options,
-                placeholder="Select a semester",
-                clearable=True,
-                searchable=False,
-                style={'width': '150px', 'marginRight': '20px'}
-            ),
-            dcc.Dropdown(
-                id='month-dropdown',
-                options=months_options,
-                placeholder="Select a month",
-                clearable=True,
-                searchable=False,
-                style={'width': '150px'}
-            ),
+            html.Div([
+                dcc.Dropdown(
+                    id='year-dropdown',
+                    options=years_options,
+                    value=initial_year,
+                    placeholder="Select a year",
+                    clearable=False,
+                    searchable=False,
+                    style={'width': '150px', 'margin-bottom': '20px'}
+                ),
+                dcc.Dropdown(
+                    id='season-dropdown',
+                    options=seasons_options,
+                    placeholder="Select a season",
+                    clearable=True,
+                    searchable=False,
+                    style={'width': '150px', 'margin-bottom': '20px'}
+                ),
+                dcc.Dropdown(
+                    id='quarter-dropdown',
+                    options=quarters_options,
+                    placeholder="Select a quarter",
+                    clearable=True,
+                    searchable=False,
+                    style={'width': '150px', 'margin-bottom': '20px'}
+                ),
+                dcc.Dropdown(
+                    id='semester-dropdown',
+                    options=semesters_options,
+                    placeholder="Select a semester",
+                    clearable=True,
+                    searchable=False,
+                    style={'width': '150px', 'margin-bottom': '20px'}
+                ),
+                dcc.Dropdown(
+                    id='month-dropdown',
+                    options=months_options,
+                    placeholder="Select a month",
+                    clearable=True,
+                    searchable=False,
+                    style={'width': '150px', 'margin-bottom': '20px'}
+                ),
+            ], style={'flex': '1', 'margin-right': '20px', 'max-width': '200px', 'margin-top': '30px'}),
+
             html.Div([
                 dcc.RadioItems(
                     id='measurement-radio',
@@ -108,8 +115,8 @@ def create_layout(years_options, measurements_options, seasons_options, quarters
                     labelStyle={'display': 'inline-block', 'margin-right': '20px'}
                 ),
                 dcc.Graph(id='choropleth-map', figure=initial_map_figure, style={'width': '100%'})
-            ], style={'flex': '1'})
-        ], style={'display': 'flex', 'alignItems': 'center', 'marginBottom': '20px'})
-    ])
+            ], style={'flex': '2', 'margin-left': '20px'})
+        ], style={'display': 'flex', 'align-items': 'flex-start', 'margin-bottom': '20px', 'justify-content': 'center'})
+    ], style={'max-width': '1000px', 'margin': '0 auto'})
 
     return layout
